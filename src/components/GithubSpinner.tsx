@@ -1,4 +1,4 @@
-import { FaCodeBranch, FaStar, FaCode, FaGithub } from 'react-icons/fa';
+import { FaCode } from 'react-icons/fa';
 
 export const GitHubSpinner = ({title} : {title?:string}) => {
   return (
@@ -13,7 +13,7 @@ export const GitHubSpinner = ({title} : {title?:string}) => {
       <p className="mt-4 text-gray-600 dark:text-gray-400 animate-pulse">
         {
             title ? title :
-            `Loading repositories...`
+            `Loading...`
         }
       </p>
     </div>

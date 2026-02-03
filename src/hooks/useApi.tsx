@@ -1,9 +1,10 @@
 // hooks/useApi.ts
 import { useState, useCallback } from 'react';
-import axios from 'axios';
+import axios, { type RawAxiosResponseHeaders } from 'axios';
 
 export function useApi<T = any>(u ?: string) {
   const [data, setData] = useState<T | null>(null);
+  const [linkHeader, setLinkHeader] = useState<RawAxiosResponseHeaders>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,6 +28,9 @@ export function useApi<T = any>(u ?: string) {
         }
       });
       setData(response.data);
+      setLinkHeader(response.headers);
+
+
       return response.data;
     } catch (err: any) {
       const message = err.response?.data?.message || err.message || 'Something went wrong';
@@ -61,6 +65,7 @@ export function useApi<T = any>(u ?: string) {
 
   return {
     data,
+    linkHeader,
     loading,
     error,
     request,
@@ -70,5 +75,6 @@ export function useApi<T = any>(u ?: string) {
     patch,
     remove,
     reset,
+
   };
 }
