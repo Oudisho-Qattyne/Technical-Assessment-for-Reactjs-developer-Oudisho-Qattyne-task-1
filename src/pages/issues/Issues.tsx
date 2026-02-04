@@ -1,4 +1,3 @@
-import axios from "axios"
 import { useEffect, useState } from "react"
 import { GitHubSpinner } from "../../components/GithubSpinner"
 import Search from "../../components/Search"
@@ -10,13 +9,30 @@ import Select from "../../components/input/Select"
 import TimeAgo from "../../components/TimeAgo"
 import Pagination from "../../components/Pagination"
 import ErrorComponent from "../../components/ErrorComponent"
+
 interface IssueState {
     id: number,
     item: string
 }
 
-const Issues = () => {
+interface Label {
+    name: string;
+    color: string;
+}
 
+interface Issue {
+    number: number;
+    title: string;
+    state: string;
+    labels: Label[];
+    user: {
+        login: string;
+    };
+    created_at: string;
+    comments: number;
+}
+
+const Issues = () => {
     const issues_state: IssueState[] = [
         {
             id: 1,
@@ -36,23 +52,12 @@ const Issues = () => {
     const [search, setSearch] = useState<string>("")
     const [page, setPage] = useState<number>(1)
     const { data: issues, loading: loadingIssues, error: issuesError, get: getIssues, linkHeader: issueHeaders } = useApi("https://api.github.com/repos/facebook/react/issues");
-    const { data: repoInfo, loading: loadingRepoInfo, error: repoInfoError, get: getRepoInfo } = useApi("https://api.github.com/repos/facebook/react");
-
-
-
-
-
-
-
+    const { data: repoInfo, loading: loadingRepoInfo, get: getRepoInfo } = useApi("https://api.github.com/repos/facebook/react");
 
     useEffect(() => {
         getIssues("", { state: state.item, per_page: 33, page: page })
         getRepoInfo()
-
-
     }, [state, page])
-
-
 
     return (
         <div className="relative w-full ">
@@ -64,7 +69,6 @@ const Issues = () => {
                     issuesError ?
                         <ErrorComponent errorMessage="Someting Went Wrong" onRetry={() => getIssues("", { state: state.item, per_page: 33, page: page })} />
                         :
-
                         loadingIssues ?
                             <GitHubSpinner />
                             :
@@ -75,7 +79,6 @@ const Issues = () => {
                                             loadingRepoInfo ?
                                                 <></>
                                                 :
-
                                                 <div className="relative gap-2 flex flex-row">
                                                     <div className="relative flex flex-row gap-1 dark:hover:bg-custom-gray-hover hover:bg-leight-foreground rounded-md p-1 duration-150 ">
                                                         <p className="relative p-1 font-bold text-xs">Open</p>
@@ -98,7 +101,7 @@ const Issues = () => {
                                     </div>
                                     <div className="realative w-full divide-y divide-custom-gray-border ">
                                         {
-                                            issues.map(issue =>
+                                            issues.map((issue: Issue) =>
                                                 <div className="relative w-full flex flex-row p-3  dark:hover:bg-custom-gray-hover hover:bg-leight duration-150 " >
                                                     <div className="relative flex justify-center items-center ">
                                                         {
@@ -119,7 +122,7 @@ const Issues = () => {
                                                             <Link className="relative font-bold hover:text-blue-700 hover:underline hover:cursor-pointer duration-150" to={`/${issue.number}`}>
                                                                 {issue.title}
                                                             </Link>
-                                                            {issue.labels.map(label =>
+                                                            {issue.labels.map((label: Label) =>
                                                                 <span className="relative flex justify-center items-center w-fit h-fit rounded-full overflow-hidden p-1 py-0.5" style={{ borderWidth: 1, borderColor: `#${label.color}` }}>
                                                                     <div className="absolute w-full h-full opacity-15" style={{ background: `#${label.color}` }} />
                                                                     <p className="relative text-xs text-current/5 whitespace-nowrap font-bold " style={{ color: `#${label.color}` }}>

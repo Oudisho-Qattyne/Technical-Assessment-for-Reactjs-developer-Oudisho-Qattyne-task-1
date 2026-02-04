@@ -6,7 +6,7 @@ function ThemeToggle() {
   useEffect(() => {
     localStorage.setItem('theme', theme);
     document.documentElement.classList.toggle('dark', theme === 'dark');
-  }, [theme]); // The effect runs whenever the theme state changes
+  }, [theme]);
 
   const toggleTheme = () => {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
