@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import { BrowserRouter, Routes, Route, useParams } from "react-router";
+import { BrowserRouter, Routes, Route } from "react-router";
 import { FaGithub } from 'react-icons/fa';
 import Issues from './pages/issues/Issues.tsx';
 import Issue from './pages/issue/Issue.tsx';
